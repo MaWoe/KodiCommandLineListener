@@ -1,0 +1,23 @@
+{
+    "name": "mosh/kodi-control-lirc",
+    "description": "Controls my amp via LIRC if Kodi starts/stops playing",
+    "type": "project",
+    "require": {
+        "nategood/httpful": "^0.2.20"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mosh\\KodiCommandLineListener\\": "src/",
+            "Mosh\\KodiCommandLineListener\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "MaWoe",
+            "email": "github@vocabula.de"
+        }
+    ]
+}
