@@ -3,22 +3,18 @@ namespace Mosh\KodiCommandLineListener;
 
 class RasPirCommand implements Command
 {
-    const RASPIR_FOLDER = '/home/pi/RasPir';
-
-    const VOLUME_UP = 'volumeUp.sh';
-
-    const VOLUME_DOWN = 'volumeDown.sh';
+    private $client;
 
     private $raspirCommand;
 
-    public function __construct($raspirCommand)
+    public function __construct(RasPirClient $client, $raspirCommand)
     {
+        $this->client = $client;
         $this->raspirCommand = $raspirCommand;
     }
 
     public function execute(KodiEventNotification $eventNotification)
     {
-        $command = self::RASPIR_FOLDER . '/' . $this->raspirCommand;
-        exec($command);
+        $this->client->executeCommand($this->raspirCommand);
     }
 }

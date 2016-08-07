@@ -65,7 +65,11 @@ class KodiCommandLineListener
             if (socket_select($read, $write, $except, 60) > 0) {
                 $result = socket_read($socket, 1024 * 16);
                 $eventInformation = json_decode($result, true);
-                $this->dispatchMethod($eventInformation);
+                if (!is_array($eventInformation)) {
+                    echo 'Malformed event: ' . $result . PHP_EOL;
+                } else {
+                    $this->dispatchMethod($eventInformation);
+                }
             }
         }
     }
