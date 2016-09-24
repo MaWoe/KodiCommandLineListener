@@ -1,7 +1,12 @@
 #!/bin/bash
 
 SCREEN_NAME="kodiCommandLineListener"
-BASE=$(dirname $0)
+BASE=$(dirname $(readlink -f $0))
+
+if [ ! $UID = 0 ]; then
+    echo "Script may only run as root"
+    exit 1
+fi
 
 is_running() {
     if screen -ls | grep -q ${SCREEN_NAME}; then

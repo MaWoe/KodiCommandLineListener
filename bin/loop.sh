@@ -1,7 +1,8 @@
 #!/bin/bash
 
-BASE=$(dirname $0)
+BASE=$(dirname $(readlink -f $0))
 
 while true; do
     $BASE/listen.php
+    sleep 10
 done
