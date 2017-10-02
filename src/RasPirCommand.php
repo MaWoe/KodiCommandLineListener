@@ -17,4 +17,8 @@ class RasPirCommand implements Command
     {
         $this->client->executeCommand($this->raspirCommand);
     }
+
+    public function processHeartBeat()
+    {
+    }
 }

@@ -1,0 +1,13 @@
+[Unit]
+Description=Kodi event dispatcher
+Requires=kodi.service
+
+[Service]
+Type=simple
+ExecStart=/home/pi/KodiCommandLineListener/bin/listen.php
+User=pi
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

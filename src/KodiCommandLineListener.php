@@ -2,29 +2,45 @@
 
 namespace Mosh\KodiCommandLineListener;
 
+use Psr\Log\LoggerInterface;
 use SplObjectStorage;
 
 class KodiCommandLineListener
 {
-    const HOST = 'mypi.home';
+    const HOST = '127.0.0.1';
 
     const PORT = 9090;
 
-    const METHOD_ON_PLAY = 'Player.OnPlay';
-
-    const METHOD_ON_STOP = 'Player.OnStop';
-
-    const METHOD_ON_PAUSE = 'Player.OnPause';
-
-    const RASPIR_HOME = '/home/pi/RasPir';
-
+    /**
+     * @var SplObjectStorage[]
+     */
     private $eventToCommandMap = array();
+
+    /**
+     * @var SplObjectStorage
+     */
+    private $allCommands;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->allCommands = new SplObjectStorage();
+        $this->logger = $logger;
+    }
 
     public function registerCommandOnEvent($eventName, Command $command)
     {
         $splObjectStorage = $this->getSplObjectStorageByEventName($eventName);
         if (!$splObjectStorage->contains($command)) {
             $splObjectStorage->attach($command);
+        }
+
+        if (!$this->allCommands->contains($command)) {
+            $this->allCommands->attach($command);
         }
     }
 
@@ -62,15 +78,17 @@ class KodiCommandLineListener
             $read = array($socket);
             $write = array();
             $except = array();
-            if (socket_select($read, $write, $except, 60) > 0) {
+            if (socket_select($read, $write, $except, 1) > 0) {
                 $result = socket_read($socket, 1024 * 16);
                 $eventInformation = json_decode($result, true);
                 if (!is_array($eventInformation)) {
-                    echo 'Malformed event: ' . $result . PHP_EOL;
+                    $this->logger->warning('Malformed event: ' . $result);
                 } else {
                     $this->dispatchMethod($eventInformation);
                 }
             }
+
+            $this->sendHeartBeatToCommands();
         }
     }
 
@@ -79,14 +97,25 @@ class KodiCommandLineListener
         $notification = KodiEventNotification::createFromNotificationArray($eventInformation);
         $eventName = $notification->eventName;
 
-        echo 'Dispatching event "' . $eventName . '"', PHP_EOL;
+        $this->logger->debug('Dispatching event "' . $eventName . '"');
+        $this->logger->debug(print_r($notification, true));
         if ($this->hasCommandsByEvent($eventName)) {
             /** @var Command $command */
             foreach ($this->getSplObjectStorageByEventName($eventName) as $command) {
                 $command->execute($notification);
             }
         } else {
-            echo 'No listeners', PHP_EOL;
+            $this->logger->debug('No listeners');
+        }
+    }
+
+    private function sendHeartBeatToCommands()
+    {
+        $this->logger->debug('Sending heartbeat');
+
+        /** @var Command $command */
+        foreach ($this->allCommands as $command) {
+            $command->processHeartBeat();
         }
     }
 

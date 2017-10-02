@@ -25,4 +25,8 @@ class RasPirVolumeCommand implements Command
             $this->client->volumeDown();
         }
     }
+
+    public function processHeartBeat()
+    {
+    }
 }

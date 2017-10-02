@@ -3,7 +3,8 @@
     "description": "Controls my amp via LIRC if Kodi starts/stops playing",
     "type": "project",
     "require": {
-        "nategood/httpful": "^0.2.20"
+        "monolog/monolog": "^1.23",
+        "symfony/console": "^3.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.5"
