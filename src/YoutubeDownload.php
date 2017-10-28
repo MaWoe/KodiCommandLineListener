@@ -7,7 +7,7 @@ class YoutubeDownload implements Command
     {
        $uri = $eventNotification->data['uri'];
        echo "DOWNLOADING YOUTUBE_URL: " . $uri . "\n";
-       exec('curl \'' . $uri . '\' > /media/SAMSUNG/Music/YoutubeDownloads/' . md5($uri) . '.mp3 &');
+       exec('curl \'' . $uri . '\' > /media/pi/SAMSUNG/Music/YoutubeDownloads/' . md5($uri) . '.mp3 &');
     }
 
     public function processHeartBeat()

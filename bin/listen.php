@@ -16,7 +16,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $logger = new ConsoleLogger(
     new ConsoleOutput(
-        OutputInterface::VERBOSITY_DEBUG
+#        OutputInterface::VERBOSITY_DEBUG
+        OutputInterface::VERBOSITY_NORMAL
     )
 );
 
@@ -34,6 +35,8 @@ $listener->registerCommandOnEvent('Other.YOUTUBE_URL', $ytCommand);
 
 $listener->registerCommandOnEvent(KodiEventMap::EVENT_PLAYER_ONPAUSE, $offCommand);
 $listener->registerCommandOnEvent(KodiEventMap::EVENT_PLAYER_ONSTOP, $offCommand);
+$listener->registerCommandOnEvent(KodiEventMap::EVENT_PLAYER_ONPLAY, $offCommand);
+
 $listener->registerCommandOnEvent(KodiEventMap::EVENT_PLAYER_ONPLAY, $onCommand);
 $listener->registerCommandOnEvent(KodiEventMap::EVENT_APPLICATION_ONVOLUMECHANGED, $volumeCommand);
 
