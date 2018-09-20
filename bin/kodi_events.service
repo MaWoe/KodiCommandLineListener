@@ -1,3 +1,4 @@
+# Copy to /lib/systemd/system/kodi_events.service
 [Unit]
 Description=Kodi event dispatcher
 Requires=kodi.service
