@@ -42,7 +42,9 @@ class DelayedOffRasPirCommand implements Command
 
     public function execute(KodiEventNotification $eventNotification)
     {
-        if (in_array($eventNotification->eventName, self::EVENTS_TO_SHUTDOWN)) {
+        if (!isset($eventNotification->data['item']['type']) || $eventNotification->data['item']['type'] === 'picture') {
+          return;
+        } else if (in_array($eventNotification->eventName, self::EVENTS_TO_SHUTDOWN)) {
             $this->startTimer();
         } else {
             $this->stopTimer();
