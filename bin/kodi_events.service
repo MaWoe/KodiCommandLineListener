@@ -1,10 +1,13 @@
 # Copy to /lib/systemd/system/kodi_events.service
+
 [Unit]
 Description=Kodi event dispatcher
 Requires=kodi.service
+After=kodi.service
 
 [Service]
 Type=simple
+ExecStartPre=/bin/sleep 10
 ExecStart=/home/pi/KodiCommandLineListener/bin/listen.php
 User=pi
 Restart=always
