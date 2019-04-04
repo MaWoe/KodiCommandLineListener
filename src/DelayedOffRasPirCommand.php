@@ -9,7 +9,7 @@ class DelayedOffRasPirCommand implements Command
         KodiEventMap::EVENT_PLAYER_ONPAUSE,
         KodiEventMap::EVENT_PLAYER_ONSTOP
     );
-    const DELAY = 10;
+    const DELAY = 30;
 
     /**
      * @var RasPirClient
